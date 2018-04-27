@@ -10,6 +10,7 @@ using MissionPlanner;
 using System.Collections;
 using System.Linq;
 using DirectShowLib;
+using System.IO;
 
 namespace MissionPlanner
 {
@@ -1082,6 +1083,10 @@ namespace MissionPlanner
         public byte ratesensors { get; set; }
         public byte raterc { get; set; }
 
+        public long time_now1;
+        public static long time_last1;
+        public static int loc_last = 0;
+
         internal static byte rateattitudebackup { get; set; }
         internal static byte ratepositionbackup { get; set; }
         internal static byte ratestatusbackup { get; set; }
@@ -1548,7 +1553,7 @@ namespace MissionPlanner
                         hilch2 = (int) (hil.pitch_elevator*10000);
                         hilch3 = (int) (hil.throttle*10000);
                         hilch4 = (int) (hil.yaw_rudder*10000);
-
+                     
                         //MAVLink.packets[(byte)MAVLink.MSG_NAMES.HIL_CONTROLS);
                     }
 
@@ -2004,7 +2009,7 @@ namespace MissionPlanner
                     if (mavLinkMessage != null)
                     {
                         var loc = mavLinkMessage.ToStructure<MAVLink.mavlink_global_position_int_t>();
-
+                        
                         // the new arhs deadreckoning may send 0 alt and 0 long. check for and undo
 
                         alt = loc.relative_alt/1000.0f;
@@ -2025,6 +2030,56 @@ namespace MissionPlanner
                             vy = loc.vy * 0.01;
                             vz = loc.vz * 0.01;
                         }
+                      //  time_now1 = DateTime.Now.Millisecond;
+                      // if(loc_last!=loc.alt)
+                       // System.Diagnostics.Debug.WriteLine("xxz " + (time_now1- time_last1) + "ms");
+                      //  Console.WriteLine("xxz");
+                      //  Console.WriteLine("{0 :N}", time_now1);
+                      //  time_last1 = time_now1;
+                      //  loc_last = loc.alt;
+
+                        StreamWriter sw = new StreamWriter("C:\\Users/Sea/Desktop/Google earth/point.kml");
+                        //Write a line of text
+
+                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\""+"?"+">");
+                        sw.WriteLine("<kml xmlns=\"http://www.opengis.net/kml/2.2\">");
+                        sw.WriteLine("<Placemark>");
+                        sw.WriteLine("<Model>");
+                        sw.WriteLine("<altitudeMode>relativeToGround</altitudeMode>");
+                        sw.WriteLine("<Location>");
+                        sw.WriteLine("<longitude>"+lng+"</longitude>");
+                        sw.WriteLine("<latitude>"+lat+"</latitude>");
+                        sw.WriteLine("<altitude>"+ altasl + "</altitude>");
+                        sw.WriteLine("</Location>");
+                        sw.WriteLine("<Orientation>");
+                        sw.WriteLine("<heading>"+yaw+"</heading>");
+                        sw.WriteLine("<tilt>"+(-pitch)+"</tilt>");
+                        sw.WriteLine("<roll>"+ (-roll) + "</roll>");
+                        sw.WriteLine("</Orientation>");
+                        sw.WriteLine("<Scale>");
+                        sw.WriteLine("<x>0.1</x>");
+                        sw.WriteLine("<y>0.1</y>");
+                        sw.WriteLine("<z>0.1</z>");
+                        sw.WriteLine("</Scale>");
+                        sw.WriteLine("<Link>");
+                        sw.WriteLine("<href>C:/Users/Sea/Desktop/Google earth/quad.dae</href>");
+                        //sw.WriteLine("<refreshMode>once</refreshMode>");
+                        sw.WriteLine("</Link>");
+                        sw.WriteLine("</Model>");
+                        sw.WriteLine("<LookAt>");
+                        sw.WriteLine("<longitude>" + lng + "</longitude>");
+                        sw.WriteLine("<latitude>" + lat + "</latitude>");
+                        sw.WriteLine("<altitude>" + altasl + "</altitude>");
+                        sw.WriteLine("<range>30</range>");
+                        sw.WriteLine("<tilt>71.131493</tilt>");
+                        sw.WriteLine("<heading>0</heading>");
+                        sw.WriteLine("</LookAt>");
+                        sw.WriteLine("</Placemark>");
+                        sw.WriteLine("</kml>");
+                       
+
+                        //Close the file
+                        sw.Close();
                     }
 
                     mavLinkMessage = MAV.getPacket((uint) MAVLink.MAVLINK_MSG_ID.GPS_RAW_INT);
