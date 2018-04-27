@@ -3669,5 +3669,22 @@ namespace MissionPlanner
         {
             new ConnectionOptions().Show(this);
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Simudataform Simudata = new Simudataform();
+            Simudata.Show();
+            StreamReader sr = new StreamReader("test.txt");
+            Simudata.textBox3.Text = sr.ReadLine();
+            Simudata.textBox4.Text = sr.ReadLine();
+            Simudata.textBox5.Text = sr.ReadLine();
+            Simudata.textBox1.Text = sr.ReadLine();
+            Simudata.textBox2.Text = sr.ReadLine();
+            Simudata.textBox6.Text = sr.ReadLine();
+            Simudata.textBox7.Text = sr.ReadLine();
+            Simudata.textBox8.Text = sr.ReadLine();
+            Simudata.textBox9.Text = sr.ReadLine();
+            sr.Close();
+        }
     }
 }

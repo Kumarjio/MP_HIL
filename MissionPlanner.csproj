@@ -450,6 +450,10 @@
       <DependentUpon>LogDownloadscp.cs</DependentUpon>
     </Compile>
     <Compile Include="Log\test\MotorFailure.cs" />
+    <Compile Include="Simudataform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Simudataform.Designer.cs" />
     <Compile Include="Strings.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -473,6 +477,12 @@
     <Compile Include="Swarm\WaypointLeader\Drone.cs" />
     <Compile Include="Swarm\WaypointLeader\DroneGroup.cs" />
     <Compile Include="Swarm\WaypointLeader\Path.cs" />
+    <Compile Include="UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl1.Designer.cs">
+      <DependentUpon>UserControl1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\BoardDetect.cs" />
     <Compile Include="CodeGen.cs" />
     <Compile Include="Comms\CommsSerialScan.cs" />
@@ -2770,6 +2780,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SerialOutputPass.pt.resx">
       <DependentUpon>SerialOutputPass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Simudataform.resx">
+      <DependentUpon>Simudataform.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.id-ID.resx">
       <DependentUpon>Strings.cs</DependentUpon>

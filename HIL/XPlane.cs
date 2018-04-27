@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using MissionPlanner.Utilities;
-
+using System.Windows.Forms;
 namespace MissionPlanner.HIL
 {
     public class XPlane : Hil, IDisposable
@@ -285,21 +285,24 @@ namespace MissionPlanner.HIL
             }
 
             MAVLink.mavlink_hil_state_t hilstate = new MAVLink.mavlink_hil_state_t();
+            Simudataform Simudata = new Simudataform();
 
             hilstate.time_usec = (UInt64) DateTime.Now.Ticks; // microsec
 
-            hilstate.lat = (int) (oldgps.latitude*1e7); // * 1E7
-            hilstate.lon = (int) (oldgps.longitude*1e7); // * 1E7
-            hilstate.alt = (int) (oldgps.altitude*1000); // mm
+            hilstate.lat = (int)(Simudataform.test_lat * 1e7); // * 1E7                     修改为Home经纬度、高度
+            hilstate.lon = (int)(Simudataform.test_lon * 1e7); // * 1E7
+            hilstate.alt = (int)(Simudataform.test_alt * 1000); // mm
 
             //   Console.WriteLine(hilstate.alt);
 
-            hilstate.pitch = (float)( sitldata.pitchDeg*MathHelper.deg2rad); // (rad)
-            hilstate.pitchspeed = (float)(sitldata.pitchRate*MathHelper.deg2rad); // (rad/s)
-            hilstate.roll = (float)(sitldata.rollDeg*MathHelper.deg2rad); // (rad)
-            hilstate.rollspeed = (float)(sitldata.rollRate*MathHelper.deg2rad); // (rad/s)
-            hilstate.yaw = (float)(sitldata.yawDeg*MathHelper.deg2rad); // (rad)
-            hilstate.yawspeed = (float)(sitldata.yawRate*MathHelper.deg2rad); // (rad/s)
+            hilstate.rollspeed = Simudataform.test_wind_speed; // (rad/s)      修改为风速
+            hilstate.pitchspeed = Simudataform.test_wind_direction; // (rad/s) 修改为风向
+            hilstate.yawspeed = Simudataform.test_wind_turbulance; // (rad/s)  修改为风的扰动
+
+            hilstate.roll = Simudataform.test_frame_mass; // (rad)             修改为机身质量
+            hilstate.pitch = Simudataform.test_frame_height; // (rad)          修改为机身高度
+
+            hilstate.yaw = (float)(sitldata.yawDeg * MathHelper.deg2rad); // (rad)
 
             hilstate.vx = (short) (sitldata.speedN*100); // m/s * 100
             hilstate.vy = (short) (sitldata.speedE*100); // m/s * 100
